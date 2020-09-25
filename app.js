@@ -5,10 +5,10 @@ const morgan = require("morgan");
 const cors = require("cors");
 const middleware = require("./utils/middleware");
 
-const indexRouter = require("./controller");
-const loginRouter = require("./controller/api/login");
-const registrationRouter = require("./controller/api/register");
-const testRouter = require("./controller/api/test");
+const indexRouter = require("./controllers");
+const loginRouter = require("./controllers/api/login");
+const registrationRouter = require("./controllers/api/register");
+const testRouter = require("./controllers/api/test");
 
 app.disable("x-powered-by");
 app.use(express.urlencoded({ extended: false }));

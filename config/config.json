@@ -1,0 +1,21 @@
+{
+  "development": {
+    "database": "cadastro_development",
+    "password": "2993",
+    "dialect": "postgres"
+  },
+  "test": {
+    "database": "cadastro_test",
+    "password": "2993",
+    "dialect": "postgres"
+  },
+  "production": {
+    "use_env_variable": "DATABASE_URL",
+    "dialect": "postgres",
+    "dialectOptions": {
+      "ssl": {
+        "rejectUnauthorized": false
+      }
+    }
+  }
+}
