@@ -1,5 +1,6 @@
 "use strict";
 const { v4: uuidv4 } = require("uuid");
+const { cpf } = require("cpf-cnpj-validator");
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
@@ -7,7 +8,7 @@ module.exports = {
       "Mediators",
       Array.from(Array(20).keys()).map((a) => ({
         id: uuidv4(),
-        cpf: "029.328.591-88",
+        cpf: cpf.format(cpf.generate()),
         fullname: "Gledyson Ferreira dos Santos",
         sex: "masculino",
         born: "1994-04-21",
@@ -33,24 +34,9 @@ module.exports = {
       })),
       {}
     );
-    /**
-     * Add seed commands here.
-     *
-     * Example:
-     * await queryInterface.bulkInsert('People', [{
-     *   name: 'John Doe',
-     *   isBetaMember: false
-     * }], {});
-     */
   },
 
   down: async (queryInterface, Sequelize) => {
     return queryInterface.bulkDelete("Mediators", null, {});
-    /**
-     * Add commands to revert seed here.
-     *
-     * Example:
-     * await queryInterface.bulkDelete('People', null, {});
-     */
   },
 };

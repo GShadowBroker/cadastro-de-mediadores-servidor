@@ -1,18 +1,26 @@
 const express = require("express");
 const router = express.Router();
-const { Mediator } = require("../models");
+const { Mediator, Camara } = require("../models");
 
 router.get("/", async (req, res, next) => {
-  let result;
+  let mediadores;
   try {
-    result = await Mediator.findAndCountAll();
+    mediadores = await Mediator.findAndCountAll();
   } catch (err) {
     return next(err);
   }
-  if (!result) return next();
-  return res
-    .status(200)
-    .json({ server_up: true, mediadores_cadastrados: result.count });
+  let camaras;
+  try {
+    camaras = await Camara.findAndCountAll();
+  } catch (err) {
+    return next(err);
+  }
+  if (!mediadores || !camaras) return next();
+  return res.status(200).json({
+    server_up: true,
+    mediadores_cadastrados: mediadores.count,
+    camaras_cadastradas: camaras.count,
+  });
 });
 
 module.exports = router;
