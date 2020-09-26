@@ -3,10 +3,10 @@ const { v4: uuidv4 } = require("uuid");
 const { cpf, cnpj } = require("cpf-cnpj-validator");
 
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
+  up: async (queryInterface) => {
     await queryInterface.bulkInsert(
       "Camaras",
-      Array.from(Array(20).keys()).map((a) => ({
+      Array.from(Array(20).keys()).map(() => ({
         id: uuidv4(),
         cnpj: cnpj.format(cnpj.generate()),
         nome_fantasia: "Maionese Boa",
@@ -32,7 +32,7 @@ module.exports = {
         phone: "+55 67 99999 9999",
         cellphone: "+55 67 99999 9999",
         password: "oi1234",
-        account_status: "pendente",
+        account_status: "regular",
         createdAt: new Date(),
         updatedAt: new Date(),
       })),
@@ -40,7 +40,7 @@ module.exports = {
     );
   },
 
-  down: async (queryInterface, Sequelize) => {
+  down: async (queryInterface) => {
     return queryInterface.bulkDelete("Camaras", null, {});
   },
 };

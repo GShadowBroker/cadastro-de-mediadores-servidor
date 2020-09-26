@@ -6,8 +6,10 @@ const cors = require("cors");
 const middleware = require("./utils/middleware");
 
 const indexRouter = require("./controllers");
-const loginRouter = require("./controllers/api/login");
-const registrationRouter = require("./controllers/api/register");
+const loginRouter = require("./controllers/api/authentication/login");
+const registrationRouter = require("./controllers/api/authentication/register");
+const mediatorsRouter = require("./controllers/api/mediadores");
+const camarasRouter = require("./controllers/api/camaras");
 const testRouter = require("./controllers/api/test");
 
 app.disable("x-powered-by");
@@ -18,8 +20,10 @@ app.use(morgan("tiny"));
 
 app.use("/", indexRouter);
 app.use("/api/login", loginRouter);
-app.use("/api/register", registrationRouter);
+app.use("/api/registrar", registrationRouter);
 app.use("/api/test", testRouter);
+app.use("/api/mediadores", mediatorsRouter);
+app.use("/api/camaras", camarasRouter);
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);

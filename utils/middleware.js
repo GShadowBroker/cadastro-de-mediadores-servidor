@@ -1,5 +1,5 @@
 const errorHandler = (err, req, res, next) => {
-  console.error(err.message);
+  logger.error(err.message);
 
   switch (err.name) {
     case "CastError":

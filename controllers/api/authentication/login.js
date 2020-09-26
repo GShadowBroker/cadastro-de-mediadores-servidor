@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-router.post("/", async (req, res, next) => {
+router.post("/", async (req, res) => {
   const { email, password } = req.body;
   if (email !== "gledyson@gmail.com") {
     return res.status(401).json({ erro: "senha ou e-mail incorretos" });
