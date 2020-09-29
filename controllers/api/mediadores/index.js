@@ -30,20 +30,7 @@ router.get("/:id", async (req, res, next) => {
         id,
         account_status: "regular",
       },
-      attributes: [
-        "id",
-        "fullname",
-        "sex",
-        "born",
-        "certification",
-        "average_value",
-        "specialization",
-        "lattes",
-        "resume",
-        "actuation_units",
-        "actuation_cities",
-        "account_status",
-      ],
+      attributes: { exclude: ["password"] },
     });
     if (!mediador || mediador.account_status !== "regular") {
       return res.status(404).json({ erro: "Perfil não encontrado" });

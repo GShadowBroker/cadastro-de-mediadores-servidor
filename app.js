@@ -20,9 +20,9 @@ app.use(cors());
 app.use(morgan("tiny"));
 
 app.use("/", indexRouter);
-app.use("/api/login", loginRouter);
-app.use("/api/registrar", registrationRouter);
-app.use("/api/validar_email", accountVerificationRouter);
+app.use("/api/autenticacao/login", loginRouter);
+app.use("/api/autenticacao/registrar", registrationRouter);
+app.use("/api/autenticacao/validar_email", accountVerificationRouter);
 app.use("/api/test", testRouter);
 app.use("/api/mediadores", mediatorsRouter);
 app.use("/api/camaras", camarasRouter);

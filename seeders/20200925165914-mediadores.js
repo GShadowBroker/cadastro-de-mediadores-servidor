@@ -9,7 +9,7 @@ module.exports = {
       Array.from(Array(20).keys()).map(() => ({
         id: uuidv4(),
         cpf: cpf.format(cpf.generate()),
-        fullname: "Gledyson Ferreira dos Santos",
+        fullname: "Fulano de Tal",
         sex: "masculino",
         born: "1994-04-21",
         certification: "certificado",
@@ -21,13 +21,12 @@ module.exports = {
         resume: "",
         actuation_units: ["TJMS"],
         actuation_cities: ["Dourados/MS"],
-        email: `gledysonferreira_${Math.floor(
-          Math.random() * 10000
-        )}@gmail.com`,
-        alternative_email: "gledysonferreira@hotmail.com",
+        email: `fulano_${Math.floor(Math.random() * 10000)}@gmail.com`,
+        alternative_email: "",
         phone: "+55 67 99999 9999",
         cellphone: "+55 67 99999 9999",
-        password: "oi1234",
+        password:
+          "$2b$12$EIaRr9/MthFdiNbWuhJ0Due2XdPKHpY0NZ21faKNetMMMFDl.4zSO",
         account_status: "regular",
         createdAt: new Date(),
         updatedAt: new Date(),

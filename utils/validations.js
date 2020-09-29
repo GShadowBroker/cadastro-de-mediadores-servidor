@@ -14,7 +14,7 @@ const formatMessage = (fieldName) => ({
 const validateNewMediator = (body) => {
   const schema = Joi.object({
     fullname: Joi.string()
-      .pattern(/^[A-zÀ-ú\s\']+$/i)
+      .pattern(/^[A-zÀ-ú\s\'\-]+$/i)
       .min(4)
       .max(155)
       .required()
@@ -140,13 +140,13 @@ const validateNewCamara = (body) => {
       .required()
       .messages(formatMessage("cnpj")),
     nome_fantasia: Joi.string()
-      .pattern(/^[A-zÀ-ú\s\']+$/i)
+      .pattern(/^[A-zÀ-ú\s\'\-]+$/i)
       .min(4)
       .max(155)
       .required()
       .messages(formatMessage("nome_fantasia")),
     razao_social: Joi.string()
-      .pattern(/^[A-zÀ-ú\s\']+$/i)
+      .pattern(/^[A-zÀ-ú\s\'\-]+$/i)
       .min(4)
       .max(155)
       .required()

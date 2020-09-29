@@ -1,21 +1,60 @@
 const express = require("express");
 const router = express.Router();
+const { Mediator, Camara } = require("../../../models");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const { authExpiration } = require("../../../config");
 
-router.post("/", async (req, res) => {
+router.post("/", async (req, res, next) => {
   const { email, password } = req.body;
-  if (email !== "gledyson@gmail.com") {
-    return res.status(401).json({ error: "senha ou e-mail incorretos" });
+  console.log("req.body", req.body);
+  if (!email || !password) {
+    return res.status(401).json({ error: "E-mail ou senha incorretos" });
   }
-  if (password !== "gledy123") {
-    return res.status(401).json({ error: "senha ou e-mail incorretos" });
+
+  try {
+    let user = await Mediator.findOne({
+      where: { email },
+      attributes: ["id", "email", "password"],
+    });
+    if (!user) {
+      user = await Camara.findOne({
+        where: { email },
+        attributes: ["id", "email", "password", "cnpj"],
+      });
+    }
+    if (!user) {
+      return res.status(401).json({ error: "E-mail ou senha incorretos" });
+    }
+
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+    if (!isPasswordCorrect) {
+      return res.status(401).json({ error: "E-mail ou senha incorretos" });
+    }
+
+    const payload = {
+      id: user.id,
+      email: user.email,
+      account_type: user.cnpj ? "camara" : "mediator",
+    };
+
+    const token = await jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: authExpiration,
+    });
+    if (!token) {
+      return res.status(500).json({ error: "Falha de autenticação" });
+    }
+
+    return res
+      .status(200)
+      .cookie("sid", token, {
+        httpOnly: true,
+        maxAge: authExpiration,
+      })
+      .json({ id: user.id, value: token });
+  } catch (err) {
+    return next(err);
   }
-  return res
-    .status(200)
-    .cookie("sid", "atireiopaunogato", {
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 * 7,
-    })
-    .json({ autenticado: true });
 });
 
 module.exports = router;

@@ -28,22 +28,7 @@ router.get("/:id", async (req, res, next) => {
         id,
         account_status: "regular",
       },
-      attributes: [
-        "id",
-        "cnpj",
-        "nome_fantasia",
-        "razao_social",
-        "average_value",
-        "site",
-        "actuation_units",
-        "actuation_cities",
-        "cep",
-        "address",
-        "complement",
-        "number",
-        "district",
-        "account_status",
-      ],
+      attributes: { exclude: ["password"] },
     });
     if (!camara || camara.account_status !== "regular") {
       return res.status(404).json({ erro: "Perfil não encontrado" });
