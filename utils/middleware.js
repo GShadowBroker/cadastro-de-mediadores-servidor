@@ -3,14 +3,14 @@ const { Mediator, Camara } = require("../models");
 const jwt = require("jsonwebtoken");
 
 const getContext = async (req, res, next) => {
-  const token = req.headers.cookie && req.headers.cookie.substring(4);
-  const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-
-  if (!token || !decodedToken.id) {
-    return res.status(401).json({ error: "Invalid or missing token" });
-  }
-
   try {
+    const token = req.headers.cookie && req.headers.cookie.substring(4);
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (!token || !decodedToken.id) {
+      return res.status(401).json({ error: "Invalid or missing token" });
+    }
+
     if (decodedToken.account_type === "mediator") {
       const loggedUser = await Mediator.findByPk(decodedToken.id, {
         attributes: { exclude: ["password"] },
