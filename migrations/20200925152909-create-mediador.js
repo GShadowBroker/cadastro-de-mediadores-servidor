@@ -50,9 +50,6 @@ module.exports = {
         type: Sequelize.ARRAY(Sequelize.STRING),
         defaultValue: [],
         allowNull: false,
-        validate: {
-          len: [0, 3],
-        },
       },
       lattes: {
         type: Sequelize.STRING(1000),
@@ -73,17 +70,11 @@ module.exports = {
         type: Sequelize.ARRAY(Sequelize.STRING),
         defaultValue: [],
         allowNull: false,
-        validate: {
-          len: [0, 28],
-        },
       },
       actuation_cities: {
         type: Sequelize.ARRAY(Sequelize.STRING),
         defaultValue: [],
         allowNull: false,
-        validate: {
-          len: [0, 55],
-        },
       },
       email: {
         type: Sequelize.STRING,
@@ -118,6 +109,7 @@ module.exports = {
         type: Sequelize.ENUM({ values: ["pendente", "regular", "suspenso"] }),
         required: true,
         allowNull: false,
+        defaultValue: "pendente",
       },
       createdAt: {
         allowNull: false,

@@ -13,6 +13,12 @@ module.exports = (sequelize, DataTypes) => {
   }
   Camara.init(
     {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        allowNull: false,
+        primaryKey: true,
+      },
       cnpj: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -58,17 +64,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.ARRAY(DataTypes.STRING),
         defaultValue: [],
         allowNull: false,
-        validate: {
-          len: [0, 28],
-        },
       },
       actuation_cities: {
         type: DataTypes.ARRAY(DataTypes.STRING),
         defaultValue: [],
         allowNull: false,
-        validate: {
-          len: [0, 55],
-        },
       },
       cep: { type: DataTypes.STRING(9), allowNull: false, required: true },
       address: {
@@ -112,6 +112,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.ENUM({ values: ["pendente", "regular", "suspenso"] }),
         required: true,
         allowNull: false,
+        defaultValue: "pendente",
       },
     },
     {

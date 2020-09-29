@@ -57,17 +57,11 @@ module.exports = {
         type: Sequelize.ARRAY(Sequelize.STRING),
         defaultValue: [],
         allowNull: false,
-        validate: {
-          len: [0, 28],
-        },
       },
       actuation_cities: {
         type: Sequelize.ARRAY(Sequelize.STRING),
         defaultValue: [],
         allowNull: false,
-        validate: {
-          len: [0, 55],
-        },
       },
       cep: {
         type: Sequelize.STRING(9),
@@ -128,6 +122,7 @@ module.exports = {
         type: Sequelize.ENUM({ values: ["pendente", "regular", "suspenso"] }),
         required: true,
         allowNull: false,
+        defaultValue: "pendente",
       },
       createdAt: {
         allowNull: false,

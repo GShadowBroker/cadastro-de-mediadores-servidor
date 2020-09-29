@@ -4,10 +4,10 @@ const router = express.Router();
 router.post("/", async (req, res) => {
   const { email, password } = req.body;
   if (email !== "gledyson@gmail.com") {
-    return res.status(401).json({ erro: "senha ou e-mail incorretos" });
+    return res.status(401).json({ error: "senha ou e-mail incorretos" });
   }
   if (password !== "gledy123") {
-    return res.status(401).json({ erro: "senha ou e-mail incorretos" });
+    return res.status(401).json({ error: "senha ou e-mail incorretos" });
   }
   return res
     .status(200)

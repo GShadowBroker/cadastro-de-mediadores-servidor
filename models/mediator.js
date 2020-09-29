@@ -13,6 +13,12 @@ module.exports = (sequelize, DataTypes) => {
   }
   Mediator.init(
     {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        allowNull: false,
+        primaryKey: true,
+      },
       fullname: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -51,9 +57,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.ARRAY(DataTypes.STRING),
         defaultValue: [],
         allowNull: false,
-        validate: {
-          len: [0, 3],
-        },
       },
       lattes: {
         type: DataTypes.STRING(1000),
@@ -74,17 +77,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.ARRAY(DataTypes.STRING),
         defaultValue: [],
         allowNull: false,
-        validate: {
-          len: [0, 28],
-        },
       },
       actuation_cities: {
         type: DataTypes.ARRAY(DataTypes.STRING),
         defaultValue: [],
         allowNull: false,
-        validate: {
-          len: [0, 55],
-        },
       },
       email: {
         type: DataTypes.STRING,
@@ -111,6 +108,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.ENUM({ values: ["pendente", "regular", "suspenso"] }),
         required: true,
         allowNull: false,
+        defaultValue: "pendente",
       },
     },
     {
