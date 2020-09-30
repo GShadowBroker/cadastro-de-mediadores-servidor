@@ -23,6 +23,12 @@ module.exports = {
         required: true,
         allowNull: false,
       },
+      expires: {
+        type: Sequelize.DATE,
+        required: true,
+        allowNull: false,
+        defaultValue: new Date().getTime() + 1000 * 60 * 15,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

@@ -10,6 +10,7 @@ const {
   validateEmail,
   validatePasswordReset,
 } = require("../../../utils/validations");
+const isCodeExpired = require("../../../utils/isCodeExpired");
 
 const endpointLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -45,14 +46,22 @@ router.post("/mediador", endpointLimiter, async (req, res, next) => {
     const existingCode = await VerificationCode.findOne({
       where: { email: mediator.email },
     });
-    if (existingCode && existingCode.code.length === 5) {
+    if (
+      existingCode &&
+      existingCode.code.length === 5 &&
+      !isCodeExpired(existingCode)
+    ) {
       sendResetPasswordKey(mediator, existingCode.code);
 
       return res.status(200).json({ success: true });
     } else {
+      if (isCodeExpired(existingCode)) {
+        await VerificationCode.destroy({ where: { email: mediator.email } });
+      }
       const newCode = await VerificationCode.create({
         email: mediator.email,
         code: crypto({ length: 5, type: "numeric" }).toString(),
+        expires: new Date().getTime() + 1000 * 60 * 15,
       });
       sendResetPasswordKey(mediator, newCode.code);
 
@@ -90,14 +99,22 @@ router.post("/camara", endpointLimiter, async (req, res, next) => {
     const existingCode = await VerificationCode.findOne({
       where: { email: camara.email },
     });
-    if (existingCode && existingCode.code.length === 5) {
+    if (
+      existingCode &&
+      existingCode.code.length === 5 &&
+      !isCodeExpired(existingCode)
+    ) {
       sendResetPasswordKey(camara, existingCode.code);
 
       return res.status(200).json({ success: true });
     } else {
+      if (isCodeExpired(existingCode)) {
+        await VerificationCode.destroy({ where: { email: camara.email } });
+      }
       const newCode = await VerificationCode.create({
         email: camara.email,
         code: crypto({ length: 5, type: "numeric" }).toString(),
+        expires: new Date().getTime() + 1000 * 60 * 15,
       });
       sendResetPasswordKey(camara, newCode.code);
 
@@ -108,7 +125,7 @@ router.post("/camara", endpointLimiter, async (req, res, next) => {
   }
 });
 
-router.post("/submit_new_password", async (req, res, next) => {
+router.post("/nova_senha", async (req, res, next) => {
   const { error, value } = validatePasswordReset(req.body);
 
   if (error) {
@@ -129,8 +146,10 @@ router.post("/submit_new_password", async (req, res, next) => {
         .status(401)
         .json({ error: "Solicitação mal formatada ou inválida" });
     }
-    if (existingCode.code !== code) {
-      return res.status(401).json({ error: "Código de segurança inválido" });
+    if (existingCode.code !== code || isCodeExpired(existingCode)) {
+      return res
+        .status(401)
+        .json({ error: "Código de segurança inválido ou expirado" });
     }
 
     let user = await Mediator.findOne({

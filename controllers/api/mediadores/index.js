@@ -11,8 +11,8 @@ router.get("/", async (req, res, next) => {
         account_status: "regular",
       },
       attributes: ["id", "fullname", "average_value", "actuation_units"],
-      limit,
-      offset,
+      limit: limit || 20,
+      offset: offset || 0,
     });
     if (!mediadores) return next();
     return res.status(200).json(mediadores);

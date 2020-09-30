@@ -10,8 +10,15 @@ const {
   validateNewCamara,
 } = require("../../../utils/validations");
 const { sendConfirmationEmail } = require("../../../utils/emailService");
+const rateLimit = require("express-rate-limit");
 
-router.post("/mediador", async (req, res, next) => {
+const endpointLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  message: "Excesso de solicitações de registro. Tente de novo mais tarde.",
+});
+
+router.post("/mediador", endpointLimiter, async (req, res, next) => {
   const { error, value } = validateNewMediator(req.body);
 
   if (error) {
@@ -51,6 +58,7 @@ router.post("/mediador", async (req, res, next) => {
     const verificationCode = await VerificationCode.create({
       email: newMediator.email,
       code: crypto({ length: 120, type: "url-safe" }),
+      expires: new Date().getTime() + 1000 * 60 * 60 * 24,
     });
 
     sendConfirmationEmail(newMediator, verificationCode.code);
@@ -61,7 +69,7 @@ router.post("/mediador", async (req, res, next) => {
   }
 });
 
-router.post("/camara", async (req, res) => {
+router.post("/camara", endpointLimiter, async (req, res) => {
   const { error, value } = validateNewCamara(req.body);
 
   if (error) {
@@ -101,6 +109,7 @@ router.post("/camara", async (req, res) => {
     const verificationCode = await VerificationCode.create({
       email: newCamara.email,
       code: crypto({ length: 120, type: "url-safe" }),
+      expires: new Date().getTime() + 1000 * 60 * 60 * 24,
     });
 
     sendConfirmationEmail(newCamara, verificationCode.code);

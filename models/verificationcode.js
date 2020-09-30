@@ -28,6 +28,12 @@ module.exports = (sequelize, DataTypes) => {
         required: true,
         allowNull: false,
       },
+      expires: {
+        type: DataTypes.DATE,
+        required: true,
+        allowNull: false,
+        defaultValue: new Date().getTime() + 1000 * 60 * 15,
+      },
     },
     {
       sequelize,

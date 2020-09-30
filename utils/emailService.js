@@ -19,7 +19,9 @@ const sendConfirmationEmail = async (user, code) => {
       from: fromEmailAddress,
       to: `${username} <${user.email}>`,
       subject: `Confirme sua conta no cadastro nacional de neutros`,
-      html: `<div><h3>Por favor, clique no link abaixo para validar o seu e-mail.</h3><p><a href="${baseUrl}/validar-conta/mediador/${user.id}/${code}">${user.id}/${code}</a></p></div>`,
+      html: `<div><h3>Por favor, clique no link abaixo para validar o seu e-mail.</h3><p><a href="${baseUrl}/validar-conta/${
+        user.cnpj ? "camara" : "mediador"
+      }/${user.id}/${code}">${user.id}/${code}</a></p></div>`,
     });
     logger.info(`E-mail enviado com sucesso para ${user.email}`);
   } catch (err) {

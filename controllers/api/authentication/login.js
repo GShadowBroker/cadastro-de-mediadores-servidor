@@ -4,8 +4,15 @@ const { Mediator, Camara } = require("../../../models");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { authExpiration } = require("../../../config");
+const rateLimit = require("express-rate-limit");
 
-router.post("/", async (req, res, next) => {
+const endpointLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  message: "Excesso de tentativas de login. Tente de novo mais tarde.",
+});
+
+router.post("/", endpointLimiter, async (req, res, next) => {
   const { email, password } = req.body;
   console.log("req.body", req.body);
   if (!email || !password) {

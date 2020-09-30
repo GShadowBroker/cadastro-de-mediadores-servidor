@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { Mediator, Camara, VerificationCode } = require("../../../models");
+const isCodeExpired = require("../../../utils/isCodeExpired");
 
 router.post("/mediador/:user_id/:verification_code", async (req, res, next) => {
   const { user_id, verification_code } = req.params;
@@ -36,10 +37,7 @@ router.post("/mediador/:user_id/:verification_code", async (req, res, next) => {
         .status(400)
         .json({ error: "Código de verificação inválido ou expirado" });
     }
-    if (
-      new Date() - new Date(verificationCode.createdAt) >=
-      1000 * 60 * 60 * 24
-    ) {
+    if (isCodeExpired(verificationCode)) {
       return res
         .status(400)
         .json({ error: "Código de verificação inválido ou expirado" });
