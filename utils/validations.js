@@ -252,7 +252,36 @@ const validateNewCamara = (body) => {
   return schema.validate(body, { abortEarly: false });
 };
 
+const validateEmail = (body) => {
+  const schema = Joi.object({
+    email: Joi.string().email().required().messages(formatMessage("email")),
+  });
+  return schema.validate(body);
+};
+
+const validatePasswordReset = (body) => {
+  const schema = Joi.object({
+    email: Joi.string().email().required().messages(formatMessage("email")),
+    password: Joi.string()
+      .pattern(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/)
+      .min(6)
+      .max(55)
+      .required()
+      .messages(formatMessage("password")),
+    code: Joi.number().integer().positive().max(99999).required().messages({
+      "number.base": "Código de segurança obrigatório",
+      "number.infinity": "Código de segurança inválido",
+      "number.max": "Código de segurança inválido",
+      "any.required": "O código de segurança é obrigatório",
+    }),
+  });
+
+  return schema.validate(body, { abortEarly: false });
+};
+
 module.exports = {
   validateNewMediator,
   validateNewCamara,
+  validatePasswordReset,
+  validateEmail,
 };

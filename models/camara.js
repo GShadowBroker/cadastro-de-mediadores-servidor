@@ -98,12 +98,9 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       alternative_email: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(255),
         allowNull: true,
-        validate: {
-          isEmail: true,
-          len: [5, 255],
-        },
+        required: false,
       },
       phone: { type: DataTypes.STRING(20), allowNull: true },
       cellphone: { type: DataTypes.STRING(20), allowNull: true },

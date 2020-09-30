@@ -9,10 +9,7 @@ const {
   validateNewMediator,
   validateNewCamara,
 } = require("../../../utils/validations");
-const {
-  sendConfirmationEmailMediator,
-  sendConfirmationEmailCamara,
-} = require("../../../utils/emailService");
+const { sendConfirmationEmail } = require("../../../utils/emailService");
 
 router.post("/mediador", async (req, res, next) => {
   const { error, value } = validateNewMediator(req.body);
@@ -56,7 +53,7 @@ router.post("/mediador", async (req, res, next) => {
       code: crypto({ length: 120, type: "url-safe" }),
     });
 
-    sendConfirmationEmailMediator(newMediator, verificationCode.code);
+    sendConfirmationEmail(newMediator, verificationCode.code);
 
     return res.status(201).json({ id: newMediator.id });
   } catch (err) {
@@ -106,7 +103,7 @@ router.post("/camara", async (req, res) => {
       code: crypto({ length: 120, type: "url-safe" }),
     });
 
-    sendConfirmationEmailCamara(newCamara, verificationCode.code);
+    sendConfirmationEmail(newCamara, verificationCode.code);
 
     return res.status(201).json({ id: newCamara.id });
   } catch (err) {

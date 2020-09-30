@@ -99,12 +99,9 @@ module.exports = {
         },
       },
       alternative_email: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(255),
         allowNull: true,
-        validate: {
-          isEmail: true,
-          len: [5, 255],
-        },
+        required: false,
       },
       phone: {
         type: Sequelize.STRING(20),
