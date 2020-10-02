@@ -3,14 +3,21 @@ const router = express.Router();
 const { Mediator } = require("../../../models");
 
 router.get("/", async (req, res, next) => {
-  const { limit, offset } = req.body;
+  const { limit, offset } = req.query;
 
   try {
     const mediadores = await Mediator.findAndCountAll({
       where: {
         account_status: "regular",
       },
-      attributes: ["id", "fullname", "average_value", "actuation_units"],
+      attributes: [
+        "id",
+        "fullname",
+        "specialization",
+        "average_value",
+        "actuation_cities",
+        "actuation_units",
+      ],
       limit: limit || 20,
       offset: offset || 0,
     });

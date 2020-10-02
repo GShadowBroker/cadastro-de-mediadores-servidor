@@ -7,8 +7,9 @@ const middleware = require("./utils/middleware");
 const rateLimit = require("express-rate-limit");
 
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
+  windowMs: 5 * 60 * 1000,
   max: 100,
+  message: "Excesso de solicitações para o servidor. Tente de novo mais tarde.",
 });
 
 const indexRouter = require("./controllers");

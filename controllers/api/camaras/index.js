@@ -3,12 +3,18 @@ const router = express.Router();
 const { Camara } = require("../../../models");
 
 router.get("/", async (req, res, next) => {
-  const { limit, offset } = req.body;
+  const { limit, offset } = req.query;
 
   try {
     const camaras = await Camara.findAndCountAll({
       where: { account_status: "regular" },
-      attributes: ["id", "nome_fantasia", "average_value", "actuation_units"],
+      attributes: [
+        "id",
+        "nome_fantasia",
+        "average_value",
+        "actuation_cities",
+        "actuation_units",
+      ],
       limit,
       offset,
     });
