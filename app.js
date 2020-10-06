@@ -23,8 +23,10 @@ const camarasRouter = require("./controllers/api/camaras");
 const userRouter = require("./controllers/api/user");
 
 app.disable("x-powered-by");
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
+app.use(
+  express.urlencoded({ limit: "25mb", extended: false, parameterLimit: 25000 })
+);
+app.use(express.json({ limit: "25mb" }));
 app.use(cors());
 app.use(morgan("tiny"));
 app.use(limiter);

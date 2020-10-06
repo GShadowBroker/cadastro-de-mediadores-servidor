@@ -47,8 +47,8 @@ module.exports = (sequelize, DataTypes) => {
         required: true,
         validate: { len: [11, 15] },
       },
-      estatuto: DataTypes.BLOB,
-      nada_consta: DataTypes.BLOB,
+      estatuto: DataTypes.JSON,
+      nada_consta: DataTypes.JSON,
       average_value: {
         type: DataTypes.ENUM({ values: ["$", "$$", "$$$", "$$$$"] }),
         allowNull: false,

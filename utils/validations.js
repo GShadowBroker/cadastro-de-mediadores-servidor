@@ -50,10 +50,7 @@ const validateNewMediator = (body) => {
         "any.required": `O campo 'average_value' é obrigatório`,
         "any.only": `O campo 'average_value' apresenta valor diferente dos permitidos`,
       }),
-    attachment: Joi.binary().required().messages({
-      "binary.base": `O campo 'attachment' é inválido`,
-      "any.required": `O campo 'attachment' é obrigatório`,
-    }),
+    attachment: Joi.string().allow(null, ""),
     specialization: Joi.array()
       .items(
         Joi.string().valid("civel", "familia", "empresarial").min(1).required()
@@ -69,7 +66,9 @@ const validateNewMediator = (body) => {
         "any.only": `Os valores do campo 'specialization' devem ser pelo menos um de ['civel', 'familia', 'empresarial']`,
       }),
     lattes: Joi.string()
-      .uri()
+      .pattern(
+        /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/i
+      )
       .max(1000)
       .required()
       .messages(formatMessage("lattes")),
@@ -140,13 +139,13 @@ const validateNewCamara = (body) => {
       .required()
       .messages(formatMessage("cnpj")),
     nome_fantasia: Joi.string()
-      .pattern(/^[A-zÀ-ú\s\'\-\/]+$/i)
+      .pattern(/[A-zÀ-ú\s\'\-\/\!\.]+/i)
       .min(4)
       .max(155)
       .required()
       .messages(formatMessage("nome_fantasia")),
     razao_social: Joi.string()
-      .pattern(/^[A-zÀ-ú\s\'\-\/]+$/i)
+      .pattern(/[A-zÀ-ú\s\'\-\/]+/i)
       .min(4)
       .max(155)
       .required()
@@ -156,8 +155,8 @@ const validateNewCamara = (body) => {
       .max(15)
       .required()
       .messages(formatMessage("nome_fantasia")),
-    estatuto: Joi.binary().allow(null, ""),
-    nada_consta: Joi.binary().allow(null, ""),
+    estatuto: Joi.string().allow(null, ""),
+    nada_consta: Joi.string().allow(null, ""),
     average_value: Joi.any()
       .valid("$", "$$", "$$$", "$$$$")
       .required()
@@ -168,8 +167,10 @@ const validateNewCamara = (body) => {
         "any.only": `O campo 'average_value' apresenta valor diferente dos permitidos`,
       }),
     site: Joi.string()
-      .uri()
-      .max(1000)
+      .pattern(
+        /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/i
+      )
+      .max(1024)
       .required()
       .messages(formatMessage("site")),
     actuation_units: Joi.array()
@@ -206,7 +207,6 @@ const validateNewCamara = (body) => {
       .required()
       .messages(formatMessage("address")),
     complement: Joi.string()
-      .min(4)
       .max(155)
       .allow(null, "")
       .messages(formatMessage("complement")),

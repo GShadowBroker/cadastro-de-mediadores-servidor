@@ -44,7 +44,7 @@ module.exports = {
         defaultValue: "voluntario",
       },
       attachment: {
-        type: Sequelize.BLOB,
+        type: Sequelize.JSON,
       },
       specialization: {
         type: Sequelize.ARRAY(Sequelize.STRING),

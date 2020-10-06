@@ -34,12 +34,90 @@ router.get("/:id", async (req, res, next) => {
         id,
         account_status: "regular",
       },
-      attributes: { exclude: ["password"] },
+      attributes: { exclude: ["password", "estatuto", "nada_consta"] },
     });
     if (!camara || camara.account_status !== "regular") {
       return res.status(404).json({ erro: "Perfil não encontrado" });
     }
     return res.status(200).json(camara);
+  } catch (err) {
+    return next(err);
+  }
+});
+
+const fs = require("fs");
+
+router.get("/:id/visualizar_estatuto", async (req, res, next) => {
+  const id = req.params.id;
+
+  try {
+    const camara = await Camara.findOne({
+      where: {
+        id,
+        account_status: "regular",
+      },
+      attributes: ["id", "account_status", "estatuto"],
+    });
+    if (!camara || camara.account_status !== "regular") {
+      return res.status(404).json({ erro: "Perfil não encontrado" });
+    }
+    if (!camara.estatuto) {
+      return res.status(404).json({ erro: "Estatuto não encontrado" });
+    }
+
+    let decodedJson;
+    if (typeof camara.estatuto === "string") {
+      decodedJson = JSON.parse(camara.estatuto);
+    } else {
+      decodedJson = camara.estatuto;
+    }
+
+    const data = decodedJson.b64;
+    const content = Buffer.from(data, "base64");
+
+    res.writeHead(200, {
+      "Content-Type": decodedJson.mime,
+      "Content-Length": content.length,
+    });
+    return res.end(content);
+  } catch (err) {
+    return next(err);
+  }
+});
+
+router.get("/:id/visualizar_nada_consta", async (req, res, next) => {
+  const id = req.params.id;
+
+  try {
+    const camara = await Camara.findOne({
+      where: {
+        id,
+        account_status: "regular",
+      },
+      attributes: ["id", "account_status", "nada_consta"],
+    });
+    if (!camara || camara.account_status !== "regular") {
+      return res.status(404).json({ erro: "Perfil não encontrado" });
+    }
+    if (!camara.nada_consta) {
+      return res.status(404).json({ erro: "Nada consta não encontrado" });
+    }
+
+    let decodedJson;
+    if (typeof camara.nada_consta === "string") {
+      decodedJson = JSON.parse(camara.nada_consta);
+    } else {
+      decodedJson = camara.nada_consta;
+    }
+
+    const data = decodedJson.b64;
+    const content = Buffer.from(data, "base64");
+
+    res.writeHead(200, {
+      "Content-Type": decodedJson.mime,
+      "Content-Length": content.length,
+    });
+    return res.end(content);
   } catch (err) {
     return next(err);
   }

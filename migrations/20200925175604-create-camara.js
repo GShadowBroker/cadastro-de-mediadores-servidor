@@ -37,10 +37,10 @@ module.exports = {
         validate: { len: [11, 15] },
       },
       estatuto: {
-        type: Sequelize.BLOB,
+        type: Sequelize.JSON,
       },
       nada_consta: {
-        type: Sequelize.BLOB,
+        type: Sequelize.JSON,
       },
       average_value: {
         type: Sequelize.ENUM({ values: ["$", "$$", "$$$", "$$$$"] }),

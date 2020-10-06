@@ -8,18 +8,18 @@ const getContext = async (req, res, next) => {
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 
     if (!token || !decodedToken.id) {
-      return res.status(401).json({ error: "Invalid or missing token" });
+      return res.status(401).json({ error: "Token inválido ou ausente" });
     }
 
     if (decodedToken.account_type === "mediator") {
       const loggedUser = await Mediator.findByPk(decodedToken.id, {
-        attributes: { exclude: ["password"] },
+        attributes: { exclude: ["password", "attachment"] },
       });
       req.loggedUser = loggedUser;
       return next();
     } else {
       const loggedUser = await Camara.findByPk(decodedToken.id, {
-        attributes: { exclude: ["password"] },
+        attributes: { exclude: ["password", "estatuto", "nada_consta"] },
       });
       req.loggedUser = loggedUser;
       return next();
@@ -34,11 +34,11 @@ const errorHandler = (err, req, res, next) => {
 
   switch (err.name) {
     case "CastError":
-      return res.status(400).json({ error: "Malformatted id" });
+      return res.status(400).json({ error: "id malformado" });
     case "ValidationError":
       return res.status(400).json({ error: err.message });
     case "JsonWebTokenError":
-      return res.status(401).json({ error: "Invalid or missing token" });
+      return res.status(401).json({ error: "Token inválido ou ausente" });
     default:
       return next(err);
   }
@@ -47,7 +47,7 @@ const errorHandler = (err, req, res, next) => {
 const unknownEndpoint = (req, res) => {
   res
     .status(404)
-    .json({ error: "This endpoint does not exist or is unavailable" });
+    .json({ error: "Este endpoint não existe ou está indisponível" });
 };
 
 module.exports = {

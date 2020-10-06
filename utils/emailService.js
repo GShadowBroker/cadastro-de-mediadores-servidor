@@ -1,7 +1,7 @@
 const nodemailer = require("nodemailer");
 const nodemailerSendgrid = require("nodemailer-sendgrid");
 const logger = require("./logger");
-const { baseUrl, fromEmailAddress } = require("../config");
+const { clientUrl, fromEmailAddress } = require("../config");
 
 const transport = nodemailer.createTransport(
   nodemailerSendgrid({
@@ -19,7 +19,7 @@ const sendConfirmationEmail = async (user, code) => {
       from: fromEmailAddress,
       to: `${username} <${user.email}>`,
       subject: `Confirme sua conta no cadastro nacional de neutros`,
-      html: `<div><h3>Por favor, clique no link abaixo para validar o seu e-mail.</h3><p><a href="${baseUrl}/validar-conta/${
+      html: `<div><h3>Por favor, clique no link abaixo para validar o seu e-mail.</h3><p><a href="${clientUrl}/validar-conta/${
         user.cnpj ? "camara" : "mediador"
       }/${user.id}/${code}">${user.id}/${code}</a></p></div>`,
     });

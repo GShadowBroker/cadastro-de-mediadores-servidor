@@ -52,7 +52,7 @@ module.exports = (sequelize, DataTypes) => {
         required: true,
         defaultValue: "voluntario",
       },
-      attachment: { type: DataTypes.BLOB },
+      attachment: { type: DataTypes.JSON },
       specialization: {
         type: DataTypes.ARRAY(DataTypes.STRING),
         defaultValue: [],
