@@ -42,7 +42,7 @@ module.exports = {
         ][Math.floor(Math.random() * 3)],
         cep: "99999-999",
         address: `${user.location.street.name}, Saint Marie Square`,
-        complement: "across river behind mayo company",
+        complement: "Across the river",
         number: user.location.street.number,
         district: `Vila São ${user.name.last}inho`,
         email: user.email,

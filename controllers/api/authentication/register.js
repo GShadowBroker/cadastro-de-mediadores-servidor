@@ -12,6 +12,7 @@ const {
 const { sendConfirmationEmail } = require("../../../utils/emailService");
 const rateLimit = require("express-rate-limit");
 const getBase64Extension = require("../../../utils/getBase64Extension");
+const isHuman = require("../../../utils/isHuman");
 
 const endpointLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -27,6 +28,17 @@ router.post("/mediador", endpointLimiter, async (req, res, next) => {
   }
   if (!value) {
     return res.status(500).json(new ApiError("Houve um erro inesperado").get());
+  }
+
+  const amIHuman = await isHuman(req.body.recaptchaValue);
+  if (!amIHuman) {
+    return res
+      .status(400)
+      .json(
+        new ApiError(
+          "Não pudemos validar que você é um humano. Por favor, recarrega a página e tente novamente."
+        ).get()
+      );
   }
 
   const existingMediator = await Mediator.findOne({
@@ -91,6 +103,17 @@ router.post("/camara", endpointLimiter, async (req, res, next) => {
   }
   if (!value) {
     return res.status(500).json(new ApiError("Houve um erro inesperado").get());
+  }
+
+  const amIHuman = await isHuman(req.body.recaptchaValue);
+  if (!amIHuman) {
+    return res
+      .status(400)
+      .json(
+        new ApiError(
+          "Não pudemos validar que você é um humano. Por favor, recarrega a página e tente novamente."
+        ).get()
+      );
   }
 
   const existingMediator = await Mediator.findOne({

@@ -126,6 +126,10 @@ const validateNewMediator = (body) => {
       "boolean.required": `O campo 'acceptTerms' é obrigatório`,
       "any.required": `O campo 'acceptTerms' é obrigatório`,
     }),
+    recaptchaValue: Joi.string()
+      .max(2048)
+      .required()
+      .messages(formatMessage("recaptchaValue")),
   });
 
   return schema.validate(body, { abortEarly: false });
@@ -247,6 +251,10 @@ const validateNewCamara = (body) => {
       "boolean.required": `O campo 'acceptTerms' é obrigatório`,
       "any.required": `O campo 'acceptTerms' é obrigatório`,
     }),
+    recaptchaValue: Joi.string()
+      .max(2048)
+      .required()
+      .messages(formatMessage("recaptchaValue")),
   });
 
   return schema.validate(body, { abortEarly: false });
