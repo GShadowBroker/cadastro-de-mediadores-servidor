@@ -58,7 +58,7 @@ router.post("/", endpointLimiter, async (req, res, next) => {
       .cookie("sid", token, {
         httpOnly: true,
         maxAge: authExpiration,
-        secure: true,
+        secure: process.env.NODE_ENV === "production",
       })
       .json({ id: user.id, value: token });
   } catch (err) {
