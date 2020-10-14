@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { authExpiration } = require("../../../config");
 const rateLimit = require("express-rate-limit");
+const { NONE } = require("sequelize");
 
 const endpointLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -57,6 +58,7 @@ router.post("/", endpointLimiter, async (req, res, next) => {
       .cookie("sid", token, {
         httpOnly: true,
         maxAge: authExpiration,
+        secure: true,
       })
       .json({ id: user.id, value: token });
   } catch (err) {
