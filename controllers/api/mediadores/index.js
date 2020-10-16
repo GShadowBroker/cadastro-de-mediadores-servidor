@@ -2,22 +2,24 @@ const express = require("express");
 const router = express.Router();
 const { Mediator } = require("../../../models");
 const { Op } = require("sequelize");
+const courts = require("../../../utils/courts");
 
 router.get("/", async (req, res, next) => {
-  const { limit, offset, fullname } = req.query;
+  const { limit, offset, filterName, filterUnits } = req.query;
 
   try {
     const mediadores = await Mediator.findAndCountAll({
-      where: fullname
-        ? {
-            account_status: "regular",
-            fullname: {
-              [Op.iLike]: `%${fullname}%`,
-            },
-          }
-        : {
-            account_status: "regular",
-          },
+      where: {
+        account_status: "regular",
+        fullname: {
+          [Op.iLike]: filterName ? `%${filterName}%` : "%%",
+        },
+        actuation_units: filterUnits
+          ? {
+              [Op.contains]: filterUnits.split(","),
+            }
+          : { [Op.ne]: null },
+      },
       attributes: [
         "id",
         "fullname",
