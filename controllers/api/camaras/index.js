@@ -1,13 +1,43 @@
 const express = require("express");
 const router = express.Router();
 const { Camara } = require("../../../models");
+const { Op } = require("sequelize");
+const courts = require("../../../utils/courts");
 
 router.get("/", async (req, res, next) => {
-  const { limit, offset } = req.query;
+  const {
+    limit,
+    offset,
+    filterName,
+    filterUnits,
+    filterAverageValues,
+    filterQualifications,
+    filterCity,
+  } = req.query;
 
   try {
     const camaras = await Camara.findAndCountAll({
-      where: { account_status: "regular" },
+      where: {
+        account_status: "regular",
+        nome_fantasia: {
+          [Op.iLike]: filterName ? `%${filterName}%` : "%%",
+        },
+        actuation_units: filterUnits
+          ? {
+              [Op.contains]: filterUnits.split(","),
+            }
+          : { [Op.ne]: null },
+        average_value: filterAverageValues
+          ? {
+              [Op.or]: filterAverageValues.split(","),
+            }
+          : { [Op.ne]: null },
+        actuation_cities: filterCity
+          ? {
+              [Op.contains]: [filterCity],
+            }
+          : { [Op.ne]: null },
+      },
       attributes: [
         "id",
         "nome_fantasia",

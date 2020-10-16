@@ -5,7 +5,15 @@ const { Op } = require("sequelize");
 const courts = require("../../../utils/courts");
 
 router.get("/", async (req, res, next) => {
-  const { limit, offset, filterName, filterUnits } = req.query;
+  const {
+    limit,
+    offset,
+    filterName,
+    filterUnits,
+    filterAverageValues,
+    filterQualifications,
+    filterCity,
+  } = req.query;
 
   try {
     const mediadores = await Mediator.findAndCountAll({
@@ -17,6 +25,16 @@ router.get("/", async (req, res, next) => {
         actuation_units: filterUnits
           ? {
               [Op.contains]: filterUnits.split(","),
+            }
+          : { [Op.ne]: null },
+        average_value: filterAverageValues
+          ? {
+              [Op.or]: filterAverageValues.split(","),
+            }
+          : { [Op.ne]: null },
+        actuation_cities: filterCity
+          ? {
+              [Op.contains]: [filterCity],
             }
           : { [Op.ne]: null },
       },
